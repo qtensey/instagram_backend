@@ -36,3 +36,22 @@ with SessionLocal() as session:
             print(f"- Post: {post.caption} (Image: {post.image_url})")
     else:
         print("User not found")
+
+with SessionLocal() as session:
+    smtm = select(Post).where(Post.caption == "Red or Blue?")
+    post_to_update = session.execute(smtm).scalar_one_or_none()
+
+    if post_to_update:
+        print(f"Old caption: {post_to_update.caption}")
+        post_to_update.caption = "I choose the Red Pill!"
+        session.commit()
+        print("Caption updated!")
+
+with SessionLocal() as session:
+    smtm_del = select(Post).where(Post.image_url == "rabbit.jpg")
+    post_to_delete = session.execute(smtm_del).scalar_one_or_none()
+
+    if post_to_delete:
+        session.delete(post_to_delete)
+        session.commit()
+        print("post deleted!")
