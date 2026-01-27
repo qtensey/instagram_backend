@@ -4,11 +4,11 @@ from sqlalchemy import select
 
 
 with SessionLocal() as session:
-    stmp = select(User).where(User.username == "neo_anderson")
+    stmt = select(User).where(User.username == "neo_anderson")
 
     # .scalar_one_or_none() — це метод, який каже: 
     # "Я очікую рівно один результат або нічого. Якщо буде 2 юзера — впади з помилкою".
-    user = session.execute(stmp).scalar_one_or_none()
+    user = session.execute(stmt).scalar_one_or_none()
 
     if user:
         print(f"User found: {user.username}, Email: {user.email}")

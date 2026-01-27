@@ -1,4 +1,5 @@
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 from database import engine, Base, SessionLocal
 from models import User, Post
 
@@ -10,33 +11,38 @@ print("Tables created successfully!")
 
 with SessionLocal() as session:
     new_user = User(
-        username="neo_anderson",
-        email="neo@matrix.com",
-        posts=[
-            Post(image_url="rabbit.jpg", caption="Follow the white rabbit"),
-            Post(image_url="pill.jpg", caption="Red or Blue?")
+        username = "Darth Vader",
+        email = "DarthVader@gmail.com",
+        posts = [
+            Post(image_url = "DarthVader.jpg", caption = "Come to the dark side")
         ]
     )
-
     session.add(new_user)
     session.commit()
-    print("Data safety!")
 
-with SessionLocal() as session:
-    smtm = select(Post).where(Post.caption == "Red or Blue?")
-    post_to_update = session.execute(smtm).scalar_one_or_none()
+    stmt = (
+        select(Post)
+        .options(joinedload(Post.user))
+        .where(Post.caption == "Come to the dark side")
+    )
+    post = session.execute(stmt).scalar_one_or_none()
+    
+    if post:
+        print(f"Post: {post.caption}")
+        print(f"Author: {post.user.username} (email: {post.user.email})")
+    else:
+        print("Post not found")
 
-    if post_to_update:
-        print(f"Old caption: {post_to_update.caption}")
-        post_to_update.caption = "I choose the Red Pill!"
+    if post:
+        print(f"Old caption: {post.caption}")
+        post.caption = "We have coockies"
         session.commit()
-        print("Caption updated!")
+        print(f"New caption: {post.caption}")
 
-with SessionLocal() as session:
-    smtm_del = select(Post).where(Post.image_url == "rabbit.jpg")
-    post_to_delete = session.execute(smtm_del).scalar_one_or_none()
-
+    stmt_del = select(Post).where(Post.image_url == "DarthVader.jpg")
+    post_to_delete = session.execute(stmt_del).scalar_one_or_none()
+    
     if post_to_delete:
         session.delete(post_to_delete)
         session.commit()
-        print("post deleted!")
+        print("Post deleted")
