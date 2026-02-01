@@ -11,6 +11,8 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     email: Mapped[str] = mapped_column(String(100), nullable=False)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    # alembic: added bio field to user class
+    bio: Mapped[Optional[str]] = mapped_column(Text)
 
     posts: Mapped[List["Post"]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
