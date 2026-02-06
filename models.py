@@ -47,7 +47,7 @@ class User(Base):
         return f"<User {self.username}>"
 
 class Profile(Base):
-    __tablename__ = "profiles"
+    __tablename__ = "profile"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     
