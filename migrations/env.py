@@ -2,7 +2,7 @@ import sys, os #
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))) #
 
 from database import Base #
-from models import User, Post, Profile, Tag, PostTag #
+from models import User, Post, Profile, Tag #
 
 from logging.config import fileConfig
 
